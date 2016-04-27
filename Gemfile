@@ -1,5 +1,7 @@
 gem 'rails',                    '~> 4.2.6'
 
+gem 'active_model_serializers', '~> 0.9.5'
+
 gem 'bcrypt',                   '~> 3.1.11'
 gem 'bootstrap-sass',           '~> 3.3.4.1'
 
