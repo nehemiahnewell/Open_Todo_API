@@ -12,8 +12,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
  
   context "authenticated users" do
     it "GET index returns index of users" do
-      get :index #full path goes here
-      # good retun goes here
+      @request.env["HTTP_AUTHORIZATION"] = "fake:faker"
+      get :index 
+      assert_equal "", response.body.chop
     end
   end
 end
