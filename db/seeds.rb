@@ -8,23 +8,32 @@ require 'random_data'
 end
 users = User.all
 
-50.times do
-  List.create!
-  {
-    user: users.sample 
-  }
+25.times do
+  List.create!(
+    user: users.sample,
+    name: RandomData.random_word,
+    permissions: "private"
+  )
+end
+25.times do
+  List.create!(
+    user: users.sample,
+    name: RandomData.random_word,
+    permissions: "public"
+  )
 end
 lists = List.all
 
 500.times do
   Item.create!
   {
-    list: lists.sample
+    list: lists.sample,
+    description: RandomData.random_word
   }
 end
 
 admin = User.create!(
-   username:     'admin',
+   username: 'admin',
    password: 'helloworld',
   )
 
