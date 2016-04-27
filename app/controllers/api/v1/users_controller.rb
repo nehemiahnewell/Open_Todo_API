@@ -1,8 +1,6 @@
 class Api::V1::UsersController < ApiController
   before_action :authenticated?
  
-
-
   def index
     users = User.all
     render json: users, each_serializer: UserSerializer
@@ -23,6 +21,6 @@ class Api::V1::UsersController < ApiController
   private
   
   def user_params
-    params.require(:user).permit()
+    params.require(:user).permit(:username, :password)
   end
 end
