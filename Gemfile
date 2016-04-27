@@ -20,7 +20,7 @@ gem 'turbolinks'
 gem 'bootstrap-sass'
 gem 'figaro'
 gem 'pry'
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~>0.9.5'
 
 group :development, :test do
   gem 'byebug'
