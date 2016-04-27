@@ -13,8 +13,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   context "authenticated users" do
     before do
       basic = ActionController::HttpAuthentication::Basic
-      @credentials = basic.encode_credentials( my_user.username, my_user.password )
-      request.env['HTTP_AUTHORIZATION'] = @credentials
+      credentials = basic.encode_credentials( my_user.username, my_user.password )
+      request.env['HTTP_AUTHORIZATION'] = credentials
     end
     
     it "GET /api/v1/users" do
