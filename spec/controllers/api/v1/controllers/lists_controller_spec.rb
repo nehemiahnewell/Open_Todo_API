@@ -1,11 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::UsersController, type: :controller do
+RSpec.describe Api::V1::ListsController, type: :controller do
   let(:my_user) { FactoryGirl.create(:user, username: "fake", password: "faker") }
+  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "public") }
  
   context "unauthenticated users" do
     it "GET index returns Access denied." do
-      get :index
+      get :index, user_id: my_user.id
       expect( response.status ).to eq( 401 )
     end
   end
@@ -18,56 +19,49 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       request.env['HTTP_AUTHORIZATION'] = @credentials
     end
     
-    it "GET /api/v1/users" do
-      get :index, {}
+    it "GET /api/v1/users/id/lists" do
+      get :index, user_id: my_user.id
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-    it "GET /api/v1/user/id" do
-      get :index, id: my_user.id {}
+    it "GET /api/v1/user/id/lists/id" do
+      get :index, user_id: my_user.id, id: my_list.id {}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-    describe "UPDATE user" do
+    describe "UPDATE list" do
       it "Updates successfully" do
-        put :update, id: my_user.id, user: {username: "real", password: "realer"}
+        put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "private"}
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
-        assert_equal "{\"user\":{\"id\":1,\"username\":\"real\",\"password\":\"realer\"}}", response.body
       end
-      it "Updates unsuccessfully, invalid username" do
-        put :update, id: my_user.id, user: {username: "", password: "realer"}
+      it "Updates unsuccessfully, invalid name" do
+        put :update, user_id: my_user.id, id: my_list.id, list: {name: "", permissions: "private"}
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
-    describe "CREATE user" do
-      it "Creates successfully" do
-        post :create, user: {username: "fakest", password: "fakester"}
+    describe "CREATE list" do
+      it "Posts successfully" do
+        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
-        assert_equal "{\"user\":{\"id\":2,\"username\":\"fakest\",\"password\":\"fakester\"}}", response.body
       end
-      it "Creates unsuccessfully, missing feild" do
-        post :create, user: {password: "fakester"}
-        expect( response.status ).to eq( 422 )
-        expect( response.content_type ).to eq( Mime::JSON )
-      end
-      it "Creates unsuccessfully, bad feild" do
-        post :create, user: {name: "fakest", password: "fakester"}
+      it "Posts unsuccessfully, missing feild" do
+        post :create, user_id: my_user.id, list: {permissions: "Discrsion"}
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
-    describe "DESTROY user" do
-      it "Delete successfully" do
-        delete :destroy, id: my_user.id
+    describe "CREATE list" do
+      it "Deletes successfully" do
+        delete :destroy, user_id: my_user.id, id: my_list.id
         expect( response.status ).to eq( 204 )
         expect( response.content_type ).to eq( Mime::JSON )
-        expect{ User.find(my_user.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+        expect{ List.find(my_list.id) }.to raise_exception(ActiveRecord::RecordNotFound)
       end
-      it "Delete unsuccessfully, bad id" do
-        delete :destroy, id: 51
+      it "Deletes unsuccessfully" do
+        delete :destroy, user_id: my_user.id, id: 42
         expect( response.status ).to eq( 404 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
