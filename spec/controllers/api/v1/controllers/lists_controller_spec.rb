@@ -63,7 +63,7 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
-    
+
     describe "CREATE list" do
       it "Deletes successfully" do
         delete :destroy, user_id: my_user.id, id: my_list.id
