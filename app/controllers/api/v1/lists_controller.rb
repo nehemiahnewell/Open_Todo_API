@@ -24,7 +24,8 @@ class Api::V1::ListsController < ApiController
  
   def destroy
     begin
-      list = List.find(params[:id])
+      user = User.find(params[:user_id])
+      list = user.lists.find(params[:id])
       list.destroy
       render json: {}, status: :no_content
     rescue ActiveRecord::RecordNotFound
@@ -33,7 +34,9 @@ class Api::V1::ListsController < ApiController
   end
   
   def update
-    list = List.find(params[:id])
+  
+    user = User.find(params[:user_id])
+    list = user.lists.find(params[:id])
     if list.update_attributes(list_params)
       render json: list
     else
