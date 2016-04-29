@@ -23,11 +23,12 @@ class Api::V1::ListsController < ApiController
   end
  
   def destroy
-   list = List.find(params[:id])
-    if list.destroy
-      render json: {message: "List destroyed", status: 200}
-    else
-      render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
+    begin
+      list = List.find(params[:id])
+      list.destroy
+      render json: {}, status: :no_content
+    rescue ActiveRecord::RecordNotFound
+      render :json => {}, :status => :not_found
     end
   end
   

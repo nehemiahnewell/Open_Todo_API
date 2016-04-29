@@ -42,7 +42,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
     it "DELETE /api/v1/user/id" do
       delete :destroy, id: my_user.id
-      expect( response.status ).to eq( 200 )
+      expect( response.status ).to eq( 204 )
       expect( response.content_type ).to eq( Mime::JSON )
       expect{ User.find(my_user.id) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
