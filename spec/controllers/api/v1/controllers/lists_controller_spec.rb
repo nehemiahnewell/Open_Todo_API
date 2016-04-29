@@ -45,7 +45,7 @@ RSpec.describe Api::V1::ListsController, type: :controller do
     
     it "DELETE /api/v1/user/id/lists/id" do
       delete :destroy, user_id: my_user.id, id: my_list.id
-      expect( response.status ).to eq( 200 )
+      expect( response.status ).to eq( 204 )
       expect( response.content_type ).to eq( Mime::JSON )
       expect{ List.find(my_list.id) }.to raise_exception(ActiveRecord::RecordNotFound)
     end

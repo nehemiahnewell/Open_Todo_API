@@ -28,7 +28,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     
     it "DELETE /api/v1/items/id" do
       delete :destroy, id: my_item.id
-      expect( response.status ).to eq( 200 )
+      expect( response.status ).to eq( 204 )
       expect( response.content_type ).to eq( Mime::JSON )
       expect{ Item.find(my_item.id) }.to raise_exception(ActiveRecord::RecordNotFound)
     end
