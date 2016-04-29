@@ -29,21 +29,42 @@ RSpec.describe Api::V1::ListsController, type: :controller do
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-    it "PUT /api/v1/user/id/lists/id" do
-      put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "private"}
-      expect( response.status ).to eq( 200 )
-      expect( response.content_type ).to eq( Mime::JSON )
+    describe "UPDATE list" do
+      it "Updates successfully" do
+        put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "private"}
+        expect( response.status ).to eq( 200 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
+      it "Updates unsuccessfully, invalid name" do
+        put :update, user_id: my_user.id, id: my_list.id, list: {name: "", permissions: "private"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
-    it "POST /api/v1/user/id/lists" do
-      post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
-      expect( response.status ).to eq( 200 )
-      expect( response.content_type ).to eq( Mime::JSON )
+    describe "CREATE list" do
+      it "Posts successfully" do
+        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
+        expect( response.status ).to eq( 200 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
+      it "Posts unsuccessfully, missing feild" do
+        post :create, user_id: my_user.id, list: {permissions: "Discrsion"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
-    it "DELETE /api/v1/user/id/lists/id" do
-      delete :destroy, user_id: my_user.id, id: my_list.id
-      expect( response.status ).to eq( 204 )
-      expect( response.content_type ).to eq( Mime::JSON )
-      expect{ List.find(my_list.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+    describe "CREATE list" do
+      it "Deletes successfully" do
+        delete :destroy, user_id: my_user.id, id: my_list.id
+        expect( response.status ).to eq( 204 )
+        expect( response.content_type ).to eq( Mime::JSON )
+        expect{ List.find(my_list.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+      it "Deletes unsuccessfully" do
+        delete :destroy, user_id: my_user.id, id: 42
+        expect( response.status ).to eq( 404 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
   end
 end

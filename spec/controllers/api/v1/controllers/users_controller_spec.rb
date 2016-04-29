@@ -28,23 +28,49 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-    it "PUT /api/v1/user/id" do
-      put :update, id: my_user.id, user: {username: "real", password: "realer"}
-      expect( response.status ).to eq( 200 )
-      expect( response.content_type ).to eq( Mime::JSON )
-      assert_equal "{\"user\":{\"id\":1,\"username\":\"real\",\"password\":\"realer\"}}", response.body
+    describe "UPDATE user" do
+      it "Updates successfully" do
+        put :update, id: my_user.id, user: {username: "real", password: "realer"}
+        expect( response.status ).to eq( 200 )
+        expect( response.content_type ).to eq( Mime::JSON )
+        assert_equal "{\"user\":{\"id\":1,\"username\":\"real\",\"password\":\"realer\"}}", response.body
+      end
+      it "Updates unsuccessfully, invalid username" do
+        put :update, id: my_user.id, user: {username: "", password: "realer"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
-    it "POST /api/v1/user/" do
-      post :create, user: {username: "fakest", password: "fakester"}
-      expect( response.status ).to eq( 200 )
-      expect( response.content_type ).to eq( Mime::JSON )
-      assert_equal "{\"user\":{\"id\":2,\"username\":\"fakest\",\"password\":\"fakester\"}}", response.body
+    describe "CREATE user" do
+      it "Creates successfully" do
+        post :create, user: {username: "fakest", password: "fakester"}
+        expect( response.status ).to eq( 200 )
+        expect( response.content_type ).to eq( Mime::JSON )
+        assert_equal "{\"user\":{\"id\":2,\"username\":\"fakest\",\"password\":\"fakester\"}}", response.body
+      end
+      it "Creates unsuccessfully, missing feild" do
+        post :create, user: {password: "fakester"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
+      it "Creates unsuccessfully, bad feild" do
+        post :create, user: {name: "fakest", password: "fakester"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
-    it "DELETE /api/v1/user/id" do
-      delete :destroy, id: my_user.id
-      expect( response.status ).to eq( 204 )
-      expect( response.content_type ).to eq( Mime::JSON )
-      expect{ User.find(my_user.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+    describe "DESTROY user" do
+      it "Delete successfully" do
+        delete :destroy, id: my_user.id
+        expect( response.status ).to eq( 204 )
+        expect( response.content_type ).to eq( Mime::JSON )
+        expect{ User.find(my_user.id) }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+      it "Delete unsuccessfully, bad id" do
+        delete :destroy, id: 51
+        expect( response.status ).to eq( 404 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
   end
 end
