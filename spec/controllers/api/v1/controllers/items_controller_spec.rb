@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ItemsController, type: :controller do
   let(:my_user) { FactoryGirl.create(:user, username: "fake", password: "faker") }
-  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "public") }
+  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "open") }
   let(:my_item) { FactoryGirl.create(:item, list: my_list, description: "Mark Twain") }
  
   context "unauthenticated users" do
@@ -21,6 +21,11 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
     end
     it "POST /api/v1/lists/id/items" do
       post :create, list_id: my_list.id, item: {description: "Yankee"}
+      expect( response.status ).to eq( 200 )
+      expect( response.content_type ).to eq( Mime::JSON )
+    end
+    it "PUT /api/v1/lists/id/items/id" do
+      put :update, list_id: my_list.id, id: my_item.id, item: {completed: true}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
