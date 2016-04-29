@@ -15,6 +15,8 @@ class Api::V1::ItemsController < ApiController
   
   def create
     item = Item.new(item_params)
+    list = List.find(params[:list_id])
+    item.list = list
     if item.save
       render json: item
     else

@@ -25,11 +25,10 @@ end
 lists = List.all
 
 500.times do
-  Item.create!
-  {
+  Item.create!(
     list: lists.sample,
     description: RandomData.random_word
-  }
+  )
 end
 
 admin = User.create!(
@@ -41,3 +40,4 @@ puts "Seed finished"
 puts "#{User.count} users created"
 puts "#{List.count} lists created"
 puts "#{Item.count} items created"
+puts "Admin account #{admin.username} password #{admin.password}"
