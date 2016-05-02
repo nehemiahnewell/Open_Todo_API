@@ -48,12 +48,14 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
+    
     describe "UPDATE items" do
       it "Puts successfully" do
         put :update, list_id: my_list.id, id: my_item.id, item: {completed: true}
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
+      
       it "Puts unsuccessfully" do
         put :update, list_id: my_list.id, id: 1500, item: {completed: false}
         expect( response.status ).to eq( 404 )

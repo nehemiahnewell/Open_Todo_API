@@ -78,6 +78,7 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
+    
     it "doesn't allow permissions other then open, viewable, and private" do
       post :create, user_id: my_user.id, list: {name: "Bad data", permissions: "purple"}
       expect( response.status ).to eq( 422 )
