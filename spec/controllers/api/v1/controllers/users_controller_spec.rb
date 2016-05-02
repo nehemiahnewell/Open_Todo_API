@@ -23,23 +23,27 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "GET /api/v1/user/id" do
       get :index, id: my_user.id {}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "PUT /api/v1/user/id" do
       put :update, id: my_user.id, user: {username: "real", password: "realer"}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
       assert_equal "{\"user\":{\"id\":1,\"username\":\"real\",\"password\":\"realer\"}}", response.body
     end
+    
     it "POST /api/v1/user/" do
       post :create, user: {username: "fakest", password: "fakester"}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
       assert_equal "{\"user\":{\"id\":2,\"username\":\"fakest\",\"password\":\"fakester\"}}", response.body
     end
+    
     it "DELETE /api/v1/user/id" do
       delete :destroy, id: my_user.id
       expect( response.status ).to eq( 200 )

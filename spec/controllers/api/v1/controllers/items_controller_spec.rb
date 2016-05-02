@@ -19,11 +19,13 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       @credentials = basic.encode_credentials( my_user.username, my_user.password )
       request.env['HTTP_AUTHORIZATION'] = @credentials
     end
+    
     it "POST /api/v1/lists/id/items" do
       post :create, list_id: my_list.id, item: {description: "Yankee"}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "DELETE /api/v1/items/id" do
       delete :destroy, id: my_item.id
       expect( response.status ).to eq( 200 )

@@ -24,21 +24,25 @@ RSpec.describe Api::V1::ListsController, type: :controller do
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "GET /api/v1/user/id/lists/id" do
       get :index, user_id: my_user.id, id: my_list.id {}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "PUT /api/v1/user/id/lists/id" do
       put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "private"}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "POST /api/v1/user/id/lists" do
       post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
+    
     it "DELETE /api/v1/user/id/lists/id" do
       delete :destroy, user_id: my_user.id, id: my_list.id
       expect( response.status ).to eq( 200 )
