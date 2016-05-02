@@ -14,7 +14,6 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
  
   context "authenticated users" do
     before do
-      # User.find_or_create_by!(username: "fake", password: "faker")
       basic = ActionController::HttpAuthentication::Basic
       @credentials = basic.encode_credentials( my_user.username, my_user.password )
       request.env['HTTP_AUTHORIZATION'] = @credentials

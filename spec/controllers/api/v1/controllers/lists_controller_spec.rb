@@ -13,7 +13,6 @@ RSpec.describe Api::V1::ListsController, type: :controller do
  
   context "authenticated users" do
     before do
-      # User.find_or_create_by!(username: "fake", password: "faker")
       basic = ActionController::HttpAuthentication::Basic
       @credentials = basic.encode_credentials( my_user.username, my_user.password )
       request.env['HTTP_AUTHORIZATION'] = @credentials
@@ -43,6 +42,7 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
+      
       it "Updates unsuccessfully, invalid permissions" do
         put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "fake"}
         expect( response.status ).to eq( 422 )
@@ -52,13 +52,13 @@ RSpec.describe Api::V1::ListsController, type: :controller do
     
     describe "CREATE list" do
       it "Posts successfully" do
-        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "viewable"}
+        post :create, user_id: my_user.id, list: { name: "Statistics", permissions: "viewable" }
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
       
       it "Posts unsuccessfully, missing feild" do
-        post :create, user_id: my_user.id, list: {permissions: "viewable"}
+        post :create, user_id: my_user.id, list: { permissions: "viewable" }
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
@@ -82,7 +82,6 @@ RSpec.describe Api::V1::ListsController, type: :controller do
     it "doesn't allow permissions other then open, viewable, and private" do
       post :create, user_id: my_user.id, list: {name: "Bad data", permissions: "purple"}
       expect( response.status ).to eq( 422 )
-      expect( response.content_type ).to eq( Mime::JSON )
     end
   end
 end
