@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ItemsController, type: :controller do
   let(:my_user) { FactoryGirl.create(:user, username: "fake", password: "faker") }
-  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "public") }
+  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "open") }
   let(:my_item) { FactoryGirl.create(:item, list: my_list, description: "Mark Twain") }
  
   context "unauthenticated users" do
@@ -44,6 +44,18 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
       
       it "Deletes unsuccessfully" do
         delete :destroy, id: 42
+        expect( response.status ).to eq( 404 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
+    end
+    describe "UPDATE items" do
+      it "Puts successfully" do
+        put :update, list_id: my_list.id, id: my_item.id, item: {completed: true}
+        expect( response.status ).to eq( 200 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
+      it "Puts unsuccessfully" do
+        put :update, list_id: my_list.id, id: 1500, item: {completed: false}
         expect( response.status ).to eq( 404 )
         expect( response.content_type ).to eq( Mime::JSON )
       end

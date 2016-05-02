@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::ListsController, type: :controller do
   let(:my_user) { FactoryGirl.create(:user, username: "fake", password: "faker") }
-  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "public") }
+  let(:my_list) { FactoryGirl.create(:list, user: my_user, name: "Lies", permissions: "open") }
  
   context "unauthenticated users" do
     it "GET index returns Access denied." do
@@ -43,17 +43,22 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
+      it "Updates unsuccessfully, invalid permissions" do
+        put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "fake"}
+        expect( response.status ).to eq( 422 )
+        expect( response.content_type ).to eq( Mime::JSON )
+      end
     end
     
     describe "CREATE list" do
       it "Posts successfully" do
-        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
+        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "viewable"}
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
       
       it "Posts unsuccessfully, missing feild" do
-        post :create, user_id: my_user.id, list: {permissions: "Discrsion"}
+        post :create, user_id: my_user.id, list: {permissions: "viewable"}
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
@@ -72,6 +77,11 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.status ).to eq( 404 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
+    end
+    it "doesn't allow permissions other then open, viewable, and private" do
+      post :create, user_id: my_user.id, list: {name: "Bad data", permissions: "purple"}
+      expect( response.status ).to eq( 422 )
+      expect( response.content_type ).to eq( Mime::JSON )
     end
   end
 end

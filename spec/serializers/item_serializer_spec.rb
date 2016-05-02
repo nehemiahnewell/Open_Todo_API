@@ -7,7 +7,7 @@ RSpec.describe ItemSerializer, type: :serializer do
   
   describe "ItemSerializer"  do
     it "should serialize an item to json" do
-      assert_equal "{\"item\":{\"id\":null,\"list\":null,\"description\":null}}", ItemSerializer.new(Item.new).to_json
+      assert_equal "{\"item\":{\"id\":null,\"list\":null,\"description\":null,\"completed\":false}}", ItemSerializer.new(Item.new).to_json
     end
   end
 end
