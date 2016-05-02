@@ -31,7 +31,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
 
     describe "UPDATE user" do
-      it "Updates successfully" do
+      it "Updates unsuccessfully" do
         put :update, id: my_user.id, user: {username: "real", password: "realer"}
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )

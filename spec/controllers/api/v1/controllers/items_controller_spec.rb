@@ -41,7 +41,7 @@ RSpec.describe Api::V1::ItemsController, type: :controller do
         expect{ Item.find(my_item.id) }.to raise_exception(ActiveRecord::RecordNotFound)
       end
       
-      it "Deletes successfully" do
+      it "Deletes unsuccessfully" do
         delete :destroy, id: 42
         expect( response.status ).to eq( 404 )
         expect( response.content_type ).to eq( Mime::JSON )
