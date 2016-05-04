@@ -28,7 +28,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-    
+
     describe "UPDATE user" do
       it "Updates unsuccessfully" do
         put :update, id: my_user.id, user: {username: "real", password: "realer"}
@@ -53,7 +53,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
       
       it "Creates unsuccessfully, missing feild" do
-        post :create, user: {password: "fakester"}
+        post :create, user: { password: "fakester" }
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
