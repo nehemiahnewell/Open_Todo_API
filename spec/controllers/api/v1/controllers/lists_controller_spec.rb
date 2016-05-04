@@ -25,15 +25,11 @@ RSpec.describe Api::V1::ListsController, type: :controller do
     end
     
     it "GET /api/v1/user/id/lists/id" do
-      get :index, user_id: my_user.id, id: my_list.id {}
+      get :index, user_id: my_user.id, id: my_list.id
       expect( response.status ).to eq( 200 )
       expect( response.content_type ).to eq( Mime::JSON )
     end
-<<<<<<< HEAD
     
-=======
-
->>>>>>> master
     describe "UPDATE list" do
       it "Updates successfully" do
         put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "private"}
@@ -46,43 +42,28 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
-<<<<<<< HEAD
       
       it "Updates unsuccessfully, invalid permissions" do
         put :update, user_id: my_user.id, id: my_list.id, list: {name: "Real", permissions: "fake"}
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
-=======
->>>>>>> master
     end
     
     describe "CREATE list" do
       it "Posts successfully" do
-<<<<<<< HEAD
         post :create, user_id: my_user.id, list: { name: "Statistics", permissions: "viewable" }
-=======
-        post :create, user_id: my_user.id, list: {name: "Statistics", permissions: "Discrsion"}
->>>>>>> master
         expect( response.status ).to eq( 200 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
       
       it "Posts unsuccessfully, missing feild" do
-<<<<<<< HEAD
         post :create, user_id: my_user.id, list: { permissions: "viewable" }
-=======
-        post :create, user_id: my_user.id, list: {permissions: "Discrsion"}
->>>>>>> master
         expect( response.status ).to eq( 422 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
     end
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> master
     describe "CREATE list" do
       it "Deletes successfully" do
         delete :destroy, user_id: my_user.id, id: my_list.id
@@ -96,14 +77,11 @@ RSpec.describe Api::V1::ListsController, type: :controller do
         expect( response.status ).to eq( 404 )
         expect( response.content_type ).to eq( Mime::JSON )
       end
-<<<<<<< HEAD
     end
     
     it "doesn't allow permissions other then open, viewable, and private" do
       post :create, user_id: my_user.id, list: {name: "Bad data", permissions: "purple"}
       expect( response.status ).to eq( 422 )
-=======
->>>>>>> master
     end
   end
 end
